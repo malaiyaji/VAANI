@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>VAANI | Neural Intelligence Interface</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=JetBrains+Mono:wght@400;500;700&family=Geist:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e5e2e1",
+                        "primary": "#ffb3b2",
+                        "on-tertiary": "#313030",
+                        "on-surface": "#e5e2e1",
+                        "on-error": "#690005",
+                        "outline": "#af8786",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container": "#201f1f",
+                        "on-primary-fixed": "#410008",
+                        "on-secondary-fixed-variant": "#454747",
+                        "error": "#ffb4ab",
+                        "secondary": "#c6c6c6",
+                        "background": "#131313",
+                        "primary-fixed": "#ffdad8",
+                        "surface-dim": "#131313",
+                        "surface-container-highest": "#353534",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-tertiary-container": "#2a2a2a",
+                        "on-primary-container": "#5b000f",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-tint": "#ffb3b2",
+                        "primary-fixed-dim": "#ffb3b2",
+                        "inverse-on-surface": "#313030",
+                        "on-secondary": "#2f3131",
+                        "surface-bright": "#3a3939",
+                        "tertiary": "#c8c6c5",
+                        "surface": "#131313",
+                        "primary-container": "#ff525c",
+                        "outline-variant": "#5f3e3e",
+                        "on-surface-variant": "#e9bcba",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-container": "#929090",
+                        "on-secondary-container": "#b4b5b5",
+                        "secondary-container": "#454747",
+                        "inverse-primary": "#bf002a",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#e5e2e1",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-background": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "on-primary": "#680012",
+                        "surface-variant": "#353534",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-primary-fixed-variant": "#92001e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "gutter": "16px",
+                        "margin": "24px",
+                        "container-max-width": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Sora"],
+                        "display-lg": ["Sora"],
+                        "body-md": ["Geist"],
+                        "label-sm": ["JetBrains Mono"],
+                        "data-lg": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Sora"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "display-lg": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "data-lg": ["48px", {"lineHeight": "48px", "letterSpacing": "-0.05em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #080808;
+            color: #e5e2e1;
+            overflow: hidden;
+        }
+        .crt-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none; z-index: 50; opacity: 0.3;
+        }
+        .noise-texture {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.1; pointer-events: none; z-index: 40;
+            filter: contrast(120%) brightness(100%);
+        }
+        .chromatic-glow {
+            text-shadow: -1.5px 0 rgba(255, 0, 0, 0.4), 1.5px 0 rgba(0, 255, 255, 0.25);
+            animation: jitter 8s infinite ease-in-out;
+        }
+        @keyframes jitter {
+            0%, 48%, 52%, 100% { transform: translate(0,0); }
+            49% { transform: translate(0.5px, -0.5px); }
+            51% { transform: translate(-0.5px, 0.5px); }
+        }
+        .glass-panel {
+            background: rgba(10, 10, 10, 0.3);
+            backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+        .signal-glow {
+            box-shadow: 0 0 20px -2px rgba(255, 82, 92, 0.5);
+        }
+        .scanline {
+            width: 100%; height: 100px; z-index: 45;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.05; position: absolute; bottom: 100%;
+            animation: scanline 12s linear infinite;
+        }
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100px; }
+        }
+        .hero-text {
+            letter-spacing: -0.05em;
+            line-height: 0.85;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container">
+
+<div class="crt-overlay"></div>
+<div class="noise-texture"></div>
+<div class="scanline"></div>
+
+<div class="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 scale-110 blur-[2px]" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDZ9Q6NfBAsFo4yz2EqsiLxj63AIGkLf00LsNxG-etiu3-Q1-gD7prTXwjKUUKmP_WTOt_EB7MCopQosaD47z_rpQIm3AUoGjn2GPh0pQGtSTorxAIzcvsFEbTKkN1u_hpc6A6UQDgPPsAT--DFFaRe9BVzqjs3mu2v93O45tUJ6TkA5qSGathT_EFugHtiBFsLJ29z1TAHEEw7yp9BAQ91yop9c_FHnzZZXzFp19TD-G4qZ4IkmDkFM-oZ6nUtglU68m4'); background-position: center; background-size: cover;">
+    <div class="absolute inset-0 bg-black/60 backdrop-brightness-75"></div>
+</div>
+
+<header class="fixed top-0 left-0 w-full z-50">
+    <div class="flex justify-between items-center w-full px-margin py-gutter max-w-container-max-width mx-auto">
+        <div class="text-headline-lg font-headline-lg font-black text-on-surface uppercase tracking-tighter cursor-pointer hover:text-primary transition-colors duration-500">
+            VAANI
+        </div>
+        <div class="font-label-sm text-[10px] tracking-widest opacity-40 uppercase">
+            MATRIX_CORE // ONLINE
+        </div>
+    </div>
+</header>
+
+<main class="relative z-10 flex items-center justify-center min-h-screen px-margin">
+    <div class="max-w-4xl w-full">
+        <div class="glass-panel p-16 md:p-24 text-center relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+            
+            <div class="relative z-20 space-y-gutter flex flex-col items-center">
+                <div class="flex flex-col items-center gap-2 mb-gutter">
+                    <div class="inline-flex items-center gap-unit px-unit*4 py-unit bg-primary-container/10 border border-primary/20 rounded-full">
+                        <span id="status-pulse" class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse shadow-[0_0_10px_rgba(255,82,92,0.8)]"></span>
+                        <span id="status" class="font-label-sm text-label-sm uppercase tracking-[0.2em] text-primary">System Interface Idle</span>
+                    </div>
+                    <div id="db-status-banner" class="font-label-sm text-[9px] tracking-widest opacity-40 text-center uppercase">
+                        CROSS_GRID_ROUTING: INTEL VECTOR STANDBY...
+                    </div>
+                </div>
+                
+                <h1 id="main-display-text" class="font-display-lg text-[72px] hero-text uppercase chromatic-glow text-on-surface transition-all duration-500 max-w-2xl">
+                    Say your <br/> issue <span class="text-primary italic">here</span>
+                </h1>
+                
+                <!-- 📡 Automated Action Display Box -->
+                <div id="dispatch-alert-card" class="hidden w-full max-w-md p-4 rounded text-left font-label-sm space-y-2 mt-4 animate-pulse">
+                    <div id="dispatch-title" class="flex items-center gap-2 font-bold tracking-wider uppercase text-[12px]">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                    <p id="dispatch-action-text" class="text-white font-body-md text-[13px] opacity-90">--</p>
+                </div>
+
+                <div id="intel-matrix" class="hidden grid grid-cols-2 gap-x-12 gap-y-2 text-left font-label-sm text-[11px] border-t border-b border-white/5 py-4 my-4 w-full max-w-md tracking-wider">
+                    <div><span class="opacity-40">JOB ENGINE:</span> <span id="readout-job" class="text-primary font-bold">--</span></div>
+                    <div><span class="opacity-40">CLASSIFY:</span> <span id="readout-type" class="text-white font-bold">--</span></div>
+                    <div><span class="opacity-40">SECTOR EXP:</span> <span id="readout-sector" class="text-white font-bold">--</span></div>
+                    <div><span class="opacity-40">DISPATCHED:</span> <span id="readout-resource" class="text-emerald-400 font-bold">--</span></div>
+                </div>
+                
+                <div class="pt-8">
+                    <button id="record-btn" onclick="toggleRecording()" class="w-24 h-24 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50 text-on-surface flex flex-col items-center justify-center gap-1 transition-all duration-500 active:scale-95 group shadow-xl cursor-pointer">
+                        <span id="record-icon" class="material-symbols-outlined text-3xl text-primary transition-all duration-300">mic</span>
+                        <span id="record-text" class="font-label-sm text-[9px] uppercase tracking-widest font-semibold opacity-60">Record</span>
+                    </button>
+                </div>
+                
+                <div class="mt-margin h-[1px] w-16 bg-primary/40 mx-auto signal-glow"></div>
+            </div>
+
+            <div id="system-readout" class="absolute bottom-6 right-8 font-label-sm text-[10px] text-on-tertiary-fixed-variant opacity-30 pointer-events-none uppercase tracking-[0.3em] max-w-xs text-right truncate">
+                VAANI_OS // CORE_VERSION_5.0
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="fixed bottom-0 left-0 w-full z-50">
+    <div class="flex flex-col md:flex-row justify-between items-center w-full px-margin py-gutter gap-unit max-w-container-max-width mx-auto">
+        <div class="font-label-sm text-[10px] text-on-surface-variant/60 uppercase tracking-widest">
+            © 2026 VAANI SYSTEMS
+        </div>
+        <div class="flex gap-margin items-center">
+            <a class="font-label-sm text-[10px] text-on-tertiary-fixed-variant/60 hover:text-on-surface uppercase tracking-widest transition-opacity" href="#">Documentation</a>
+            <span class="text-on-tertiary-fixed-variant/20">/</span>
+            <a class="font-label-sm text-[10px] text-on-tertiary-fixed-variant/60 hover:text-on-surface uppercase tracking-widest transition-opacity" href="#">Privacy</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('mousemove', (e) => {
+        const moveX = (e.clientX - window.innerWidth / 2) / 80;
+        const moveY = (e.clientY - window.innerHeight / 2) / 80;
+        const panel = document.querySelector('.glass-panel');
+        const bg = document.querySelector('.fixed.inset-0.z-0');
+        
+        if(panel) panel.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        if(bg) bg.style.transform = `scale(1.1) translate(${moveX * -0.5}px, ${moveY * -0.5}px)`;
+    });
+
+    let mediaRecorder;
+    let audioChunks = [];
+    let isRecording = false;
+
+    async function toggleRecording() {
+        const recordBtn = document.getElementById("record-btn");
+        const recordIcon = document.getElementById("record-icon");
+        const recordText = document.getElementById("record-text");
+        const statusPulse = document.getElementById("status-pulse");
+        const statusText = document.getElementById("status");
+
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    statusText.innerText = "Processing Voice Protocol via Sarvam AI...";
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    await processCrisisPipeline(audioBlob);
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+
+                recordBtn.classList.add("border-red-500/50", "bg-red-900/20");
+                recordIcon.innerText = "stop";
+                recordIcon.className = "material-symbols-outlined text-3xl text-red-500 animate-pulse";
+                recordText.innerText = "Stop";
+                statusPulse.className = "w-1.5 h-1.5 rounded-full bg-red-500 animate-ping shadow-[0_0_10px_#ef4444]";
+                statusText.innerText = "Intercepting local audio data streams...";
+                statusText.className = "font-label-sm text-label-sm uppercase tracking-[0.2em] text-red-400";
+
+            } catch (err) {
+                console.error("Audio pipeline crash:", err);
+                statusText.innerText = "CAPTURE HARDWARE MALFUNCTION";
+            }
+        } else {
+            mediaRecorder.stop();
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            isRecording = false;
+
+            recordBtn.classList.remove("border-red-500/50", "bg-red-900/20");
+            recordIcon.innerText = "mic";
+            recordIcon.className = "material-symbols-outlined text-3xl text-primary";
+            recordText.innerText = "Record";
+        }
+    }
+
+    async function processCrisisPipeline(blob) {
+        const statusText = document.getElementById("status");
+        const statusPulse = document.getElementById("status-pulse");
+        const mainDisplay = document.getElementById("main-display-text");
+        const intelMatrix = document.getElementById("intel-matrix");
+        const dispatchCard = document.getElementById("dispatch-alert-card");
+        const dispatchTitle = document.getElementById("dispatch-title");
+        const dispatchText = document.getElementById("dispatch-action-text");
+
+        const formData = new FormData();
+        formData.append("file", blob, "live_capture.webm");
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/api/voice-incident", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) throw new Error("Flask pipeline error");
+
+            const data = await response.json();
+            const transcript = data.transcript;
+
+            mainDisplay.innerHTML = `<span class="text-sm block tracking-widest text-primary/60 font-label-sm uppercase mb-2">TRANSCRIPT CAPTURED</span> "${transcript}"`;
+            mainDisplay.classList.remove("text-[72px]");
+            mainDisplay.classList.add("text-[32px]", "normal-case", "font-body-md");
+
+            document.getElementById("readout-job").innerText = data.job_id;
+            document.getElementById("readout-type").innerText = data.incident_type;
+            document.getElementById("readout-sector").innerText = data.sector;
+            document.getElementById("readout-resource").innerText = data.allocated_resource;
+            
+            intelMatrix.classList.remove("hidden");
+
+            statusPulse.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]";
+            statusText.innerText = "Neural Intention Decoded";
+            statusText.className = "font-label-sm text-label-sm uppercase tracking-[0.2em] text-emerald-400";
+
+            // 🧠 COGNITIVE SYSTEM ROUTER PAYLOAD
+            const routing = data.routing;
+            const appType = routing.target_app.toLowerCase();
+            const params = routing.extracted_params;
+            let targetUrl = "";
+
+            dispatchCard.className = "w-full max-w-md p-4 rounded text-left font-label-sm space-y-2 mt-4 block border";
+            dispatchCard.classList.remove("hidden");
+
+            switch(appType) {
+                case "amazon":
+                    dispatchCard.classList.add("bg-orange-950/20", "border-orange-500/30", "shadow-[0_0_15px_rgba(249,115,22,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-orange-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">shopping_cart</span> AMAZON SUPPLY CORE`;
+                    dispatchText.innerText = `Sourcing consumer network. Initializing search vectors for "${params.product_query}"...`;
+                    targetUrl = `https://www.amazon.in/s?k=${encodeURIComponent(params.product_query)}`;
+                    break;
+
+                case "flipkart":
+                    dispatchCard.classList.add("bg-blue-950/20", "border-blue-500/30", "shadow-[0_0_15px_rgba(59,130,246,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-blue-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">local_mall</span> FLIPKART LOGISTICS MATRIX`;
+                    dispatchText.innerText = `Querying commercial databases for item matrix indices matching "${params.product_query}"...`;
+                    targetUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(params.product_query)}`;
+                    break;
+
+                case "food":
+                    dispatchCard.classList.add("bg-rose-950/20", "border-rose-500/30", "shadow-[0_0_15px_rgba(244,63,94,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-rose-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">restaurant</span> BIO-SUSTENANCE DISPATCH`;
+                    dispatchText.innerText = `Scanning localized food grids to fulfill physical craving: "${params.craving}"...`;
+                    targetUrl = `https://www.google.com/maps/search/${encodeURIComponent(params.craving)}`;
+                    break;
+
+                case "notes":
+                    dispatchCard.classList.add("bg-stone-800/60", "border-stone-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-stone-300 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">description</span> SYSTEM ARCHIVE RECORDER`;
+                    dispatchText.innerText = `Appended text stream safely to your local disk storage records: "${params.note_content}"`;
+                    targetUrl = ""; 
+                    break;
+
+                case "pomodoro":
+                    dispatchCard.classList.add("bg-amber-950/20", "border-amber-500/40");
+                    dispatchTitle.className = "flex items-center gap-2 text-amber-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">timer</span> CHRONOS FOCUS LOCK`;
+                    dispatchText.innerText = `Focus session initialized safely for ${params.duration_minutes} minutes. Interface protocols restricted.`;
+                    targetUrl = ""; 
+                    break;
+
+                case "spotify":
+                    dispatchCard.classList.add("bg-emerald-950/20", "border-emerald-500/30", "shadow-[0_0_15px_rgba(16,185,129,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-emerald-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">music_note</span> ACOUSTIC MATRIX ENGAGED`;
+                    dispatchText.innerText = `Searching ecosystem. Playing context focus: "${params.query}" inside Spotify Player...`;
+                    targetUrl = `https://open.spotify.com/search/${encodeURIComponent(params.query)}/tracks`;
+                    break;
+
+                case "calendar":
+                    dispatchCard.classList.add("bg-sky-950/20", "border-sky-500/30", "shadow-[0_0_15px_rgba(14,165,233,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-sky-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">calendar_today</span> TEMPORAL ENGINE ENGAGED`;
+                    dispatchText.innerText = `Drafting meeting structure parameters: "${params.event_title}"...`;
+                    targetUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(params.event_title)}&details=${encodeURIComponent(params.details)}`;
+                    break;
+
+                case "email":
+                    dispatchCard.classList.add("bg-purple-950/20", "border-purple-500/30", "shadow-[0_0_15px_rgba(168,85,247,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-purple-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">psychology</span> ADVANCED EXECUTIVE DISPATCH`;
+                    dispatchText.innerText = "Synthesizing dynamic context token layout parameters via secure pipeline core...";
+                    targetUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(params.subject)}&body=${encodeURIComponent(params.body)}`;
+                    break;
+
+                case "chatgpt":
+                    dispatchCard.classList.add("bg-amber-950/20", "border-amber-500/30", "shadow-[0_0_15px_rgba(245,158,11,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-amber-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">smart_toy</span> COGNITIVE AI CONSOLE`;
+                    dispatchText.innerText = "Injecting custom vector prompt arrays straight to processing instance...";
+                    targetUrl = `https://chatgpt.com/?q=${encodeURIComponent(params.ai_prompt)}`;
+                    break;
+
+                case "maps":
+                    dispatchCard.classList.add("bg-green-950/20", "border-green-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-green-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">map</span> GEOSPATIAL MAPS ENGINE`;
+                    dispatchText.innerText = `Resolving routing maps pathing nodes for: "${params.location}"...`;
+                    targetUrl = `https://www.google.com/maps/search/${encodeURIComponent(params.location)}`;
+                    break;
+
+                case "notion":
+                    dispatchCard.classList.add("bg-stone-800/60", "border-stone-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-stone-300 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">edit_note</span> NOTION WORKSPACE TARGET`;
+                    dispatchText.innerText = "Routing contextual logs to central workspace document arrays...";
+                    targetUrl = "https://www.notion.so";
+                    break;
+
+                case "whatsapp":
+                    dispatchCard.classList.add("bg-teal-950/20", "border-teal-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-teal-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">chat</span> WHATSAPP MESSENGER INTERFACE`;
+                    dispatchText.innerText = "Opening messenger core frameworks to allocate communication pipeline lines...";
+                    targetUrl = "https://web.whatsapp.com";
+                    break;
+
+                case "github":
+                    dispatchCard.classList.add("bg-neutral-900", "border-neutral-600");
+                    dispatchTitle.className = "flex items-center gap-2 text-neutral-300 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">terminal</span> DEVOPS GITHUB INTEGRATION`;
+                    dispatchText.innerText = "Loading remote infrastructure nodes inside GitHub cloud networks...";
+                    targetUrl = "https://github.com";
+                    break;
+
+                default:
+                    dispatchCard.classList.add("hidden");
+                    targetUrl = "";
+            }
+
+            // Automatic window transition delay
+            if (targetUrl !== "") {
+                setTimeout(() => { window.location.href = targetUrl; }, 2200);
+            }
+
+        } catch (error) {
+            console.error("Pipeline fault:", error);
+            statusPulse.className = "w-1.5 h-1.5 rounded-full bg-red-500";
+            statusText.innerText = "System dispatch error // 500";
+        }
+    }
+</script>
+</body>
+</html>

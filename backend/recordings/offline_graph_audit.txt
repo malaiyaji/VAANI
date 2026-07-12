@@ -1,0 +1,4 @@
+GRAPH NODE: (:Incident {id: 'VNI-2026-130644', type: 'Fire Emergency'}) -[:OCCURRED_IN]->(:Sector {id: 'SECTOR_E4'})
+GRAPH NODE: (:Incident {id: 'VNI-2026-BB8E88', type: 'Fire Emergency'}) -[:OCCURRED_IN]->(:Sector {id: 'SECTOR_E4'})
+GRAPH NODE: (:Incident {id: 'VNI-2026-2E6887', type: 'Fire Emergency'}) -[:OCCURRED_IN]->(:Sector {id: 'SECTOR_E4'})
+GRAPH NODE: (:Incident {id: 'VNI-2026-2D4202', type: 'Fire Emergency'}) -[:OCCURRED_IN]->(:Sector {id: 'SECTOR_E4'})
