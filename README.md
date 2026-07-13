@@ -1,50 +1,58 @@
-# 🪐 VAANI | Neural Intelligence Interface
+# 🪐 VAANI | Neural Voice Intelligence Interface
 
-VAANI is a next-generation voice intelligence interface that translates human speech intent into automated deep-link application routing. Built with a high-fidelity cyberpunk aesthetic, VAANI captures real-time audio streams, processes the parameters through a localized AI matrix pipeline, and instantly dispatches the user to the correct digital sector—all without requiring manual navigation.
+VAANI is an immersive, next-generation full-stack voice intelligence matrix that translates real-time human speech intent into automated deep-link application routing. 
 
----
-
-## 🚀 Live Demo & Infrastructure
-* **Live Production Interface:** [Insert your Vercel/Netlify/GitHub Pages URL here]
-* **Neural Pipeline Core (Backend):** `https://vaani-m25h.onrender.com`
+Built with a striking cyberpunk HUD aesthetic, the system bypasses traditional UI friction. It continuously captures vocal data packets from the browser, streams them to a cloud microservice container, isolates structural semantic parameters using AI intent extraction, and instantly flashes a dynamic routing card before dispatching the user to their target digital sector.
 
 ---
 
-## ⚡ Key Features (Hackathon Highlights)
-
-* **Autonomous Intent Routing Matrix:** Dynamically classifies audio streams and routes parameters natively into ecosystems like Pinterest, YouTube, Spotify, Amazon, WhatsApp, and ChatGPT.
-* **Fail-Safe Web Search Fallback:** Architecture is built to never break. If an unrecognized app command is given, the system elegantly downgrades to a Global Web Search engine instead of crashing.
-* **Optional Chaining & Param Extraction Protection:** Frontend utilizes strict structural safety protocols (`params?.query`) ensuring that missing AI data packets fail gracefully without freezing the interface.
-* **Immersive Cyberpunk HUD:** Full dark-mode UI equipped with CRT screen overlay filters, mouse-tracking parallax distortions, dynamic state banners, and micro-interaction animations.
-* **Hands-Free Accessibility Framework:** Empowers users by mapping continuous voice patterns straight to specific actions, bypassing deep application menus.
+## 🚀 Live Core Systems & Deployment
+* **Production HUD Interface:** `[Insert your live Vercel/Netlify/GitHub Pages URL here]`
+* **Neural Pipeline Infrastructure (Backend Engine):** `https://vaani-m25h.onrender.com`
 
 ---
 
-## 🛠️ The Tech Stack
+## ⚡ Hackathon Highlights & Core Capabilities
 
-| Layer | Technology | Function |
+* **Autonomous Multitask Intent Parser:** Seamlessly classifies speech variables into specific software targets. It maps variables natively to **Pinterest** (Visual Matrix), **YouTube** (Stream Core), **Spotify** (Acoustic Ecosystem), **WhatsApp**, **ChatGPT**, and e-commerce nodes.
+* **Fail-Safe Web Search Fallback:** Architecture engineered for zero runtime crashes. If the backend returns an unrecognized application command or raw transcription parameters, the application gracefully routes the intent to a Global Web Search dashboard.
+* **Robust Param Extraction Shielding:** Implements client-side optional parameter chaining (`params?.query` / `params?.craving`). If the AI microservice encounters token omissions or structural shifts, the UI maps a default vector string instead of freezing the script thread.
+* **Biometric Signal Interceptor:** Utilizes the hardware-level `MediaRecorder` API to convert live user voice captures into raw secure binary `.webm` blobs for dynamic network transmission.
+* **Immersive Cyberpunk Matrix HUD:** Features a high-fidelity retro-futuristic styling suite including active scanline animation frames, CRT noise filter overlays, dynamic state-pulse color switches based on system loads, and mouse-reactive parallax grid shifts.
+
+---
+
+## 🛠️ The Architecture & Full-Stack Blueprint
+
+### Frontend Architecture
+* **Layout & Engine:** HTML5, Modern ES6+ JavaScript, Tailwind CSS (Form/Container Query engines).
+* **Iconography & Systems:** Material Symbols Core, Sora, and JetBrains Mono cyber-grid typography.
+
+### Backend Infrastructure
+* **Microserver Core:** Python + Flask Web Framework.
+* **Intelligence Processing:** Advanced Voice-to-Text Conversion & Deep Intent Parameter Extraction Frameworks (Leveraging Sarvam AI Processing Subsystems).
+
+---
+
+## 📊 Automated Dispatch Protocol Targets
+
+When a user speaks into the biometric sensor node, the frontend system dynamically transforms extracted parameters into targeted operational pathways:
+
+| Command Target | Vector Grid Address | Operational Parameter Managed |
 | :--- | :--- | :--- |
-| **Frontend UI** | HTML5, Tailwind CSS, JavaScript (ES6+) | Interface, Audio Capturing, CRT/Matrix rendering |
-| **Styling Core** | Google Material Symbols, Sora & JetBrains Mono Fonts | Retro-futuristic typography and hardware iconography |
-| **Pipeline Bridge**| MediaRecorder API, Secure HTTPS FormData Streams | Delivering local `.webm` audio vectors to the cloud |
-| **Backend Matrix** | Flask, Sarvam AI API / LLM Engine | Audio transcription, entity extraction, intent classification |
+| **Pinterest** | `https://in.pinterest.com/search/pins/?q=` | Visual moodboard & style generation (`params.query`) |
+| **YouTube** | `https://www.youtube.com/results?search_query=` | Audio-visual grid rendering (`params.query`) |
+| **Amazon / Flipkart**| Dedicated commercial query endpoints | E-commerce supply tracking (`params.product_query`) |
+| **ChatGPT Console** | `https://chatgpt.com/?q=` | Cognitive raw vector injection (`params.ai_prompt`) |
+| **Spotify Core** | `https://open.spotify.com/search/.../tracks` | Acoustic audio matrix focus tracking (`params.query`) |
+| **Geo-Spatial Maps** | `https://www.google.com/maps/search/` | Location routing calculations (`params.location`) |
 
 ---
 
-## 🧭 System Ecosystem Links & Integration Vectors
+## 💻 Technical Execution & Run Procedures
 
-The interface parses incoming voice tokens to generate localized operational URLs:
-* **Pinterest Engine:** `https://in.pinterest.com/search/pins/?q=` (Creative & moodboard sourcing)
-* **YouTube Core:** `https://www.youtube.com/results?search_query=` (Global video matrix)
-* **Amazon / Flipkart Matrix:** Deep consumer search queries for product matrices.
-* **Cognitive Console:** Direct custom context injection to `chatgpt.com/?q=`.
-* **Acoustic Grid:** Direct track searching inside the Spotify web system.
-
----
-
-## 💻 Quick Start & Deployment
-
-### Local Initialization
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git)
+### 1. Local Development Run
+To launch the frontend dashboard framework locally, satisfy browser security layers by serving it over a clean network environment:
+```bash
+# Using Python microservers
+python -m http.server 3000
