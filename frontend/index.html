@@ -176,7 +176,7 @@
             
             <div class="relative z-20 space-y-gutter flex flex-col items-center">
                 <div class="flex flex-col items-center gap-2 mb-gutter">
-                    <div class="inline-flex items-center gap-unit px-unit*4 py-unit bg-primary-container/10 border border-primary/20 rounded-full">
+                    <div class="inline-flex items-center gap-unit px-gutter py-unit bg-primary-container/10 border border-primary/20 rounded-full">
                         <span id="status-pulse" class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse shadow-[0_0_10px_rgba(255,82,92,0.8)]"></span>
                         <span id="status" class="font-label-sm text-label-sm uppercase tracking-[0.2em] text-primary">System Interface Idle</span>
                     </div>
@@ -249,6 +249,8 @@
     let audioChunks = [];
     let isRecording = false;
 
+    const DEPLOYED_BACKEND_URL = "https://vaani-m25h.onrender.com/api/voice-incident";
+
     async function toggleRecording() {
         const recordBtn = document.getElementById("record-btn");
         const recordIcon = document.getElementById("record-icon");
@@ -312,7 +314,7 @@
         formData.append("file", blob, "live_capture.webm");
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/api/voice-incident", {
+            const response = await fetch(DEPLOYED_BACKEND_URL, {
                 method: "POST",
                 body: formData
             });
@@ -326,10 +328,10 @@
             mainDisplay.classList.remove("text-[72px]");
             mainDisplay.classList.add("text-[32px]", "normal-case", "font-body-md");
 
-            document.getElementById("readout-job").innerText = data.job_id;
-            document.getElementById("readout-type").innerText = data.incident_type;
-            document.getElementById("readout-sector").innerText = data.sector;
-            document.getElementById("readout-resource").innerText = data.allocated_resource;
+            document.getElementById("readout-job").innerText = data.job_id || "--";
+            document.getElementById("readout-type").innerText = data.incident_type || "--";
+            document.getElementById("readout-sector").innerText = data.sector || "--";
+            document.getElementById("readout-resource").innerText = data.allocated_resource || "--";
             
             intelMatrix.classList.remove("hidden");
 
@@ -337,45 +339,66 @@
             statusText.innerText = "Neural Intention Decoded";
             statusText.className = "font-label-sm text-label-sm uppercase tracking-[0.2em] text-emerald-400";
 
-            // 🧠 COGNITIVE SYSTEM ROUTER PAYLOAD
             const routing = data.routing;
-            const appType = routing.target_app.toLowerCase();
-            const params = routing.extracted_params;
+            if (!routing) return;
+            
+            const appType = routing.target_app ? routing.target_app.toLowerCase() : "";
+            const params = routing.extracted_params || {};
             let targetUrl = "";
 
             dispatchCard.className = "w-full max-w-md p-4 rounded text-left font-label-sm space-y-2 mt-4 block border";
             dispatchCard.classList.remove("hidden");
 
-            switch(appType) {
+            const cleanAppType = appType ? appType.trim().toLowerCase() : "";
+
+            switch(cleanAppType) {
+                case "pinterest":
+                    dispatchCard.classList.add("bg-rose-950/30", "border-red-600/40", "shadow-[0_0_15px_rgba(225,29,72,0.25)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-rose-500 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">collections</span> PINTEREST VISUAL MATRIX`;
+                    const pinQuery = params && params.query ? params.query : (transcript || "");
+                    dispatchText.innerText = `Sourcing creative style and visual moodboards for: "${pinQuery}"...`;
+                    targetUrl = `https://in.pinterest.com/search/pins/?q=${encodeURIComponent(pinQuery)}`;
+                    break;
+
+                case "youtube":
+                    dispatchCard.classList.add("bg-red-950/20", "border-red-500/30", "shadow-[0_0_15px_rgba(239,68,68,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-red-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">video_library</span> YOUTUBE STREAM ENGINE`;
+                    const ytQuery = params && params.query ? params.query : (transcript || "");
+                    dispatchText.innerText = `Routing request to global video matrix for: "${ytQuery}"...`;
+                    targetUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(ytQuery)}`;
+                    break;
+
                 case "amazon":
                     dispatchCard.classList.add("bg-orange-950/20", "border-orange-500/30", "shadow-[0_0_15px_rgba(249,115,22,0.2)]");
                     dispatchTitle.className = "flex items-center gap-2 text-orange-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">shopping_cart</span> AMAZON SUPPLY CORE`;
-                    dispatchText.innerText = `Sourcing consumer network. Initializing search vectors for "${params.product_query}"...`;
-                    targetUrl = `https://www.amazon.in/s?k=${encodeURIComponent(params.product_query)}`;
+                    dispatchText.innerText = `Sourcing consumer network. Initializing search vectors for "${params?.product_query || 'items'}"...`;
+                    targetUrl = `https://www.amazon.in/s?k=${encodeURIComponent(params?.product_query || '')}`;
                     break;
 
                 case "flipkart":
                     dispatchCard.classList.add("bg-blue-950/20", "border-blue-500/30", "shadow-[0_0_15px_rgba(59,130,246,0.2)]");
                     dispatchTitle.className = "flex items-center gap-2 text-blue-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">local_mall</span> FLIPKART LOGISTICS MATRIX`;
-                    dispatchText.innerText = `Querying commercial databases for item matrix indices matching "${params.product_query}"...`;
-                    targetUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(params.product_query)}`;
+                    dispatchText.innerText = `Querying commercial databases for item matrix indices matching "${params?.product_query || 'items'}"...`;
+                    targetUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(params?.product_query || '')}`;
                     break;
 
                 case "food":
                     dispatchCard.classList.add("bg-rose-950/20", "border-rose-500/30", "shadow-[0_0_15px_rgba(244,63,94,0.2)]");
                     dispatchTitle.className = "flex items-center gap-2 text-rose-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">restaurant</span> BIO-SUSTENANCE DISPATCH`;
-                    dispatchText.innerText = `Scanning localized food grids to fulfill physical craving: "${params.craving}"...`;
-                    targetUrl = `https://www.google.com/maps/search/${encodeURIComponent(params.craving)}`;
+                    dispatchText.innerText = `Scanning localized food grids to fulfill physical craving: "${params?.craving || 'food'}"...`;
+                    targetUrl = `https://www.google.com/maps/search/${encodeURIComponent(params?.craving || 'restaurants')}`;
                     break;
 
                 case "notes":
                     dispatchCard.classList.add("bg-stone-800/60", "border-stone-500/30");
                     dispatchTitle.className = "flex items-center gap-2 text-stone-300 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">description</span> SYSTEM ARCHIVE RECORDER`;
-                    dispatchText.innerText = `Appended text stream safely to your local disk storage records: "${params.note_content}"`;
+                    dispatchText.innerText = `Appended text stream safely to your local disk storage records: "${params?.note_content || transcript}"`;
                     targetUrl = ""; 
                     break;
 
@@ -383,7 +406,7 @@
                     dispatchCard.classList.add("bg-amber-950/20", "border-amber-500/40");
                     dispatchTitle.className = "flex items-center gap-2 text-amber-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">timer</span> CHRONOS FOCUS LOCK`;
-                    dispatchText.innerText = `Focus session initialized safely for ${params.duration_minutes} minutes. Interface protocols restricted.`;
+                    dispatchText.innerText = `Focus session initialized safely for ${params?.duration_minutes || 25} minutes. Interface protocols restricted.`;
                     targetUrl = ""; 
                     break;
 
@@ -391,16 +414,16 @@
                     dispatchCard.classList.add("bg-emerald-950/20", "border-emerald-500/30", "shadow-[0_0_15px_rgba(16,185,129,0.2)]");
                     dispatchTitle.className = "flex items-center gap-2 text-emerald-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">music_note</span> ACOUSTIC MATRIX ENGAGED`;
-                    dispatchText.innerText = `Searching ecosystem. Playing context focus: "${params.query}" inside Spotify Player...`;
-                    targetUrl = `https://open.spotify.com/search/${encodeURIComponent(params.query)}/tracks`;
+                    dispatchText.innerText = `Searching ecosystem. Playing context focus: "${params?.query || 'music'}" inside Spotify Player...`;
+                    targetUrl = `https://open.spotify.com/search/${encodeURIComponent(params?.query || '')}/tracks`;
                     break;
 
                 case "calendar":
                     dispatchCard.classList.add("bg-sky-950/20", "border-sky-500/30", "shadow-[0_0_15px_rgba(14,165,233,0.2)]");
                     dispatchTitle.className = "flex items-center gap-2 text-sky-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">calendar_today</span> TEMPORAL ENGINE ENGAGED`;
-                    dispatchText.innerText = `Drafting meeting structure parameters: "${params.event_title}"...`;
-                    targetUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(params.event_title)}&details=${encodeURIComponent(params.details)}`;
+                    dispatchText.innerText = `Drafting meeting structure parameters: "${params?.event_title || 'Meeting'}"...`;
+                    targetUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(params?.event_title || '')}&details=${encodeURIComponent(params?.details || '')}`;
                     break;
 
                 case "email":
@@ -408,7 +431,7 @@
                     dispatchTitle.className = "flex items-center gap-2 text-purple-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">psychology</span> ADVANCED EXECUTIVE DISPATCH`;
                     dispatchText.innerText = "Synthesizing dynamic context token layout parameters via secure pipeline core...";
-                    targetUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(params.subject)}&body=${encodeURIComponent(params.body)}`;
+                    targetUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(params?.subject || '')}&body=${encodeURIComponent(params?.body || '')}`;
                     break;
 
                 case "chatgpt":
@@ -416,15 +439,15 @@
                     dispatchTitle.className = "flex items-center gap-2 text-amber-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">smart_toy</span> COGNITIVE AI CONSOLE`;
                     dispatchText.innerText = "Injecting custom vector prompt arrays straight to processing instance...";
-                    targetUrl = `https://chatgpt.com/?q=${encodeURIComponent(params.ai_prompt)}`;
+                    targetUrl = `https://chatgpt.com/?q=${encodeURIComponent(params?.ai_prompt || transcript)}`;
                     break;
 
                 case "maps":
                     dispatchCard.classList.add("bg-green-950/20", "border-green-500/30");
                     dispatchTitle.className = "flex items-center gap-2 text-green-400 font-bold tracking-wider uppercase text-[12px]";
                     dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">map</span> GEOSPATIAL MAPS ENGINE`;
-                    dispatchText.innerText = `Resolving routing maps pathing nodes for: "${params.location}"...`;
-                    targetUrl = `https://www.google.com/maps/search/${encodeURIComponent(params.location)}`;
+                    dispatchText.innerText = `Resolving routing maps pathing nodes for: "${params?.location || 'maps'}"...`;
+                    targetUrl = `https://www.google.com/maps/search/${encodeURIComponent(params?.location || '')}`;
                     break;
 
                 case "notion":
@@ -452,11 +475,13 @@
                     break;
 
                 default:
-                    dispatchCard.classList.add("hidden");
-                    targetUrl = "";
+                    dispatchCard.classList.add("bg-neutral-800/60", "border-neutral-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-neutral-300 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">search</span> GLOBAL WEB SEARCH`;
+                    dispatchText.innerText = `Command "${cleanAppType || 'unknown'}" unrecognized. Defaulting routing engines to Web Intel...`;
+                    targetUrl = `https://www.google.com/search?q=${encodeURIComponent(transcript || 'VAANI AI')}`;
             }
 
-            // Automatic window transition delay
             if (targetUrl !== "") {
                 setTimeout(() => { window.location.href = targetUrl; }, 2200);
             }

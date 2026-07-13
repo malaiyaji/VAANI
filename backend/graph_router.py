@@ -1,19 +1,18 @@
 import os
 from neo4j import GraphDatabase
 
-# Mapped exactly to your downloaded credentials file, bro!
-NEO4J_URI = "neo4j+s://d4c69ff1.databases.neo4j.io"
-NEO4J_USER = "d4c69ff1"  # 🔥 FIX: Changed from 'neo4j' to your real instance ID username!
-NEO4J_PASSWORD = "vTquqhn4OgVBlGtdYgPfuAxETh_ZYZ5M9CrdkM1esGg"
+NEO4J_URI = os.environ.get("NEO4J_URI", "neo4j+s://d4c69ff1.databases.neo4j.io")
+NEO4J_USER = os.environ.get("NEO4J_USER", "d4c69ff1")
+NEO4J_PASSWORD = os.environ.get("NEO4J_PASSWORD", "vTquqhn4OgVBlGtdYgPfuAxETh_ZYZ5M9CrdkM1esGg")
 
 class VAANIGraphRouter:
     def __init__(self):
         self.driver = None
         try:
             self.driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
-            # Fast connectivity verification check
             self.driver.verify_connectivity()
             self.online = True
+            print("[GRAPH DB] Connected successfully to Aura Node.")
         except Exception as e:
             self.online = False
             print(f"[GRAPH DB WARNING] Connection failed: {e}. Defaulting to Offline Engine Mode.")
@@ -49,7 +48,6 @@ class VAANIGraphRouter:
     def find_and_link_dispatch(self, job_id, incident_type, sector_id):
         """Creates an Incident node and maps the closest available matching resource asset."""
         if not self.online:
-            # High-end fallback string array if database is offline
             import random
             return random.choice([
                 "ALPHA_STRIKE_UNIT_01 (SPATIAL)",
@@ -59,17 +57,11 @@ class VAANIGraphRouter:
 
         query = """
         MATCH (s:Sector {id: $sector_id})
-        
-        // 1. Generate the active crisis node
         MERGE (i:Incident {id: $job_id, type: $incident_type, status: "ACTIVE"})
         MERGE (i)-[:OCCURRED_IN]->(s)
-        
-        // 2. Query matching resource stationed inside this sector zone
         WITH s, i
         MATCH (r:Resource)-[:STATIONED_IN]->(s)
         WHERE NOT (r)-[:ASSIGNED_TO]->(:Incident {status: "ACTIVE"})
-        
-        // 3. Bind resource node to active incident path
         MERGE (r)-[:ASSIGNED_TO]->(i)
         RETURN r.name AS allocated_resource
         """

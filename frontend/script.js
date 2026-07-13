@@ -20,7 +20,15 @@ async function startRecording() {
     audioChunks = []; 
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        
+        // 🍏 SAFARI / CROSS-BROWSER FALLBACK
+        // WebM is native on Chrome/Firefox. Safari (Mac/iOS) requires an MP4 fallback container.
+        let options = { mimeType: 'audio/webm' };
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            options = { mimeType: 'audio/mp4' };
+        }
+
+        mediaRecorder = new MediaRecorder(stream, options);
 
         mediaRecorder.ondataavailable = (event) => {
             if (event.data.size > 0) {
@@ -29,9 +37,12 @@ async function startRecording() {
         };
 
         mediaRecorder.onstop = async () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const audioBlob = new Blob(audioChunks, { type: options.mimeType });
             const formData = new FormData();
-            formData.append('file', audioBlob, 'recording.webm');
+            
+            // Derive extension match from assigned audio profile container type
+            const fileExtension = options.mimeType.includes('mp4') ? 'mp4' : 'webm';
+            formData.append('file', audioBlob, `recording.${fileExtension}`);
 
             updateUIStatus("Processing audio through VAANI pipeline...");
 
@@ -41,7 +52,7 @@ async function startRecording() {
                     body: formData
                 });
 
-                if (!response.ok) throw new Error("Flask execution fault.");
+                if (!response.ok) throw new Error(`Flask execution fault. Status Code: ${response.status}`);
 
                 const data = await response.json();
                 console.log("🚀 Server packet returned:", data);
@@ -64,7 +75,7 @@ async function startRecording() {
 function stopRecording() {
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
-        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        mediaRecorder.stream.getTracks().forEach(track => track.stop()); // Clean hardware states
         updateUIStatus("Processing transmission stream...");
     }
 }
@@ -83,20 +94,28 @@ function updateDashboardUI(data) {
     const sectorText = document.getElementById("sector-text");
     const dbStatusBanner = document.getElementById("db-status-banner"); 
 
-    if (transcriptBox) transcriptBox.innerText = `"${data.transcript}"`;
-    if (incidentBadge) incidentBadge.innerText = data.incident_type;
-    if (resourceText) resourceText.innerText = data.allocated_resource;
-    if (sectorText) sectorText.innerText = data.sector;
+    // Robust default text fallbacks preventing ugly "undefined" strings
+    if (transcriptBox) transcriptBox.innerText = data?.transcript ? `"${data.transcript}"` : `"No text parsed"`;
+    if (incidentBadge) incidentBadge.innerText = data?.incident_type || "UNKNOWN";
+    if (resourceText) resourceText.innerText = data?.allocated_resource || "UNASSIGNED";
+    if (sectorText) sectorText.innerText = data?.sector || "NONE";
 
-    // 🚨 REPORT THE ROUTING STATUS LIVE ON THE DASHBOARD DISPLAY
+    // 🚨 OPTIONAL CHAINING GUARD
+    // If workflow_engine_status isn't present, using optional chaining prevents a total script crash
     if (dbStatusBanner) {
-        if (data.workflow_engine_status.db_status === "FALLBACK_LOCAL") {
+        const dbStatus = data?.workflow_engine_status?.db_status;
+        
+        if (dbStatus === "FALLBACK_LOCAL") {
             dbStatusBanner.innerText = "⚠️ SYSTEM WARNING: Neo4j Cloud Port 7687 Blocked. Local Core Ledger Engaged.";
             dbStatusBanner.style.backgroundColor = "#e74c3c"; 
             dbStatusBanner.style.color = "white";
-        } else {
+        } else if (dbStatus === "CONNECTED" || dbStatus === "ACTIVE" || data?.workflow_engine_status) {
             dbStatusBanner.innerText = "⚡ Neo4j Aura Cloud Node: Synchronized and Active.";
             dbStatusBanner.style.backgroundColor = "#2ecc71"; 
+            dbStatusBanner.style.color = "white";
+        } else {
+            dbStatusBanner.innerText = "🛑 Ledger Status Unknown. Microservice Unreachable.";
+            dbStatusBanner.style.backgroundColor = "#7f8c8d";
             dbStatusBanner.style.color = "white";
         }
     }
