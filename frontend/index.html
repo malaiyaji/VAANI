@@ -249,7 +249,8 @@
     let audioChunks = [];
     let isRecording = false;
 
-    const DEPLOYED_BACKEND_URL = "https://vaani-m25h.onrender.com/api/voice-incident";
+    // 🔥 OPTIMIZED SOLUTION: Declared clean base with no trailing slash
+    const DEPLOYED_BACKEND_URL = "https://vaani-m25h.onrender.com";
 
     async function toggleRecording() {
         const recordBtn = document.getElementById("record-btn");
@@ -314,7 +315,8 @@
         formData.append("file", blob, "live_capture.webm");
 
         try {
-            const response = await fetch(DEPLOYED_BACKEND_URL, {
+            // 🔥 Clean URL combination template string to safeguard routing paths
+            const response = await fetch(`${DEPLOYED_BACKEND_URL}/api/voice-incident`, {
                 method: "POST",
                 body: formData
             });
