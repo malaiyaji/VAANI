@@ -12,7 +12,7 @@
             darkMode: "class",
             theme: {
                 extend: {
-                    colors: {
+                    "colors": {
                         "tertiary-fixed": "#e5e2e1",
                         "primary": "#ffb3b2",
                         "on-tertiary": "#313030",
@@ -61,27 +61,27 @@
                         "secondary-fixed": "#e2e2e2",
                         "on-primary-fixed-variant": "#92001e"
                     },
-                    borderRadius: {
-                        "DEFAULT": "4px",
-                        "lg": "8px",
-                        "xl": "16px",
-                        "full": "9999px"
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
                     },
-                    spacing: {
+                    "spacing": {
                         "unit": "4px",
                         "gutter": "16px",
                         "margin": "24px",
                         "container-max-width": "1440px"
                     },
-                    fontFamily: {
-                        "headline-lg": ["Sora", "sans-serif"],
-                        "display-lg": ["Sora", "sans-serif"],
-                        "body-md": ["Geist", "sans-serif"],
-                        "label-sm": ["JetBrains Mono", "monospace"],
-                        "data-lg": ["JetBrains Mono", "monospace"],
-                        "headline-lg-mobile": ["Sora", "sans-serif"]
+                    "fontFamily": {
+                        "headline-lg": ["Sora"],
+                        "display-lg": ["Sora"],
+                        "body-md": ["Geist"],
+                        "label-sm": ["JetBrains Mono"],
+                        "data-lg": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Sora"]
                     },
-                    fontSize: {
+                    "fontSize": {
                         "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
                         "display-lg": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "800"}],
                         "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
@@ -95,156 +95,161 @@
     </script>
     <style>
         body {
-            background-color: #060606;
+            background-color: #080808;
             color: #e5e2e1;
-            overflow-x: hidden;
+            overflow: hidden;
         }
         .crt-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.015), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.015));
-            background-size: 100% 3px, 4px 100%;
-            pointer-events: none; z-index: 50; opacity: 0.4;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none; z-index: 50; opacity: 0.3;
         }
         .noise-texture {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: url("https://grainy-gradients.vercel.app/noise.svg");
-            opacity: 0.07; pointer-events: none; z-index: 40;
-            filter: contrast(140%) brightness(90%);
+            opacity: 0.1; pointer-events: none; z-index: 40;
+            filter: contrast(120%) brightness(100%);
         }
         .chromatic-glow {
-            text-shadow: -2px 0 rgba(255, 82, 92, 0.5), 2px 0 rgba(0, 242, 254, 0.3);
-            animation: jitter 6s infinite ease-in-out;
+            text-shadow: -1.5px 0 rgba(255, 0, 0, 0.4), 1.5px 0 rgba(0, 255, 255, 0.25);
+            animation: jitter 8s infinite ease-in-out;
         }
         @keyframes jitter {
             0%, 48%, 52%, 100% { transform: translate(0,0); }
-            49% { transform: translate(0.8px, -0.4px); }
-            51% { transform: translate(-0.8px, 0.4px); }
+            49% { transform: translate(0.5px, -0.5px); }
+            51% { transform: translate(-0.5px, 0.5px); }
         }
         .glass-panel {
-            background: rgba(14, 14, 14, 0.45);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.7);
+            background: rgba(10, 10, 10, 0.3);
+            backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
         }
         .signal-glow {
-            box-shadow: 0 0 32px -4px rgba(255, 82, 92, 0.4);
+            box-shadow: 0 0 20px -2px rgba(255, 82, 92, 0.5);
         }
         .scanline {
-            width: 100%; height: 120px; z-index: 45;
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 0, 0, 0) 100%);
-            opacity: 0.08; position: absolute; bottom: 100%;
-            animation: scanline 10s linear infinite;
+            width: 100%; height: 100px; z-index: 45;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.05; position: absolute; bottom: 100%;
+            animation: scanline 12s linear infinite;
         }
         @keyframes scanline {
             0% { bottom: 100%; }
-            100% { bottom: -120px; }
+            100% { bottom: -100px; }
         }
         .hero-text {
-            letter-spacing: -0.04em;
-            line-height: 1.05;
+            letter-spacing: -0.05em;
+            line-height: 0.85;
         }
     </style>
 </head>
-<body class="font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col justify-between relative">
+<body class="font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container">
 
 <div class="crt-overlay"></div>
 <div class="noise-texture"></div>
 <div class="scanline"></div>
 
-<!-- Ambient Blurred Background Shield -->
-<div class="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 scale-105 blur-[3px]" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDZ9Q6NfBAsFo4yz2EqsiLxj63AIGkLf00LsNxG-etiu3-Q1-gD7prTXwjKUUKmP_WTOt_EB7MCopQosaD47z_rpQIm3AUoGjn2GPh0pQGtSTorxAIzcvsFEbTKkN1u_hpc6A6UQDgPPsAT--DFFaRe9BVzqjs3mu2v93O45tUJ6TkA5qSGathT_EFugHtiBFsLJ29z1TAHEEw7yp9BAQ91yop9c_FHnzZZXzFp19TD-G4qZ4IkmDkFM-oZ6nUtglU68m4');">
-    <div class="absolute inset-0 bg-black/75 backdrop-brightness-50"></div>
+<div class="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 scale-110 blur-[2px]" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDZ9Q6NfBAsFo4yz2EqsiLxj63AIGkLf00LsNxG-etiu3-Q1-gD7prTXwjKUUKmP_WTOt_EB7MCopQosaD47z_rpQIm3AUoGjn2GPh0pQGtSTorxAIzcvsFEbTKkN1u_hpc6A6UQDgPPsAT--DFFaRe9BVzqjs3mu2v93O45tUJ6TkA5qSGathT_EFugHtiBFsLJ29z1TAHEEw7yp9BAQ91yop9c_FHnzZZXzFp19TD-G4qZ4IkmDkFM-oZ6nUtglU68m4'); background-position: center; background-size: cover;">
+    <div class="absolute inset-0 bg-black/60 backdrop-brightness-75"></div>
 </div>
 
-<header class="fixed top-0 left-0 w-full z-50 border-b border-white/[0.02] bg-black/10 backdrop-blur-md">
-    <div class="flex justify-between items-center w-full px-margin py-5 max-w-container-max-width mx-auto">
-        <div class="text-headline-lg font-headline-lg font-black text-on-surface uppercase tracking-tighter cursor-pointer hover:text-primary transition-colors duration-300">
+<header class="fixed top-0 left-0 w-full z-50">
+    <div class="flex justify-between items-center w-full px-margin py-gutter max-w-container-max-width mx-auto">
+        <div class="text-headline-lg font-headline-lg font-black text-on-surface uppercase tracking-tighter cursor-pointer hover:text-primary transition-colors duration-500">
             VAANI
         </div>
-        <div class="font-label-sm text-[10px] tracking-[0.3em] font-bold text-primary/80 bg-primary-container/10 px-3 py-1 border border-primary/20 rounded-md">
-            CORE_GRID // ONLINE
+        <div class="font-label-sm text-[10px] tracking-widest opacity-40 uppercase">
+            MATRIX_CORE // ONLINE
         </div>
     </div>
 </header>
 
-<main class="relative z-10 flex flex-col items-center justify-center flex-grow w-full px-margin pt-32 pb-16">
-    <div class="max-w-4xl w-full mx-auto">
-        <div class="glass-panel rounded-xl p-8 md:p-16 text-center relative overflow-hidden group transition-all duration-500 hover:border-white/10">
-            <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent"></div>
+<main class="relative z-10 flex items-center justify-center min-h-screen px-margin">
+    <div class="max-w-4xl w-full">
+        <div class="glass-panel p-16 md:p-24 text-center relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
             
-            <div class="relative z-20 flex flex-col items-center">
-                
-                <!-- Status Header Block -->
-                <div class="flex flex-col items-center gap-2 mb-10">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-neutral-900/60 border border-white/5 rounded-full backdrop-blur-sm">
-                        <span id="status-pulse" class="w-2 h-2 rounded-full bg-primary-container animate-pulse shadow-[0_0_12px_rgba(255,82,92,0.8)]"></span>
-                        <span id="status" class="font-label-sm text-[11px] uppercase tracking-[0.2em] text-primary/90 font-semibold">System Interface Idle</span>
+            <div class="relative z-20 space-y-gutter flex flex-col items-center">
+                <div class="flex flex-col items-center gap-2 mb-gutter">
+                    <div class="inline-flex items-center gap-unit px-gutter py-unit bg-primary-container/10 border border-primary/20 rounded-full">
+                        <span id="status-pulse" class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse shadow-[0_0_10px_rgba(255,82,92,0.8)]"></span>
+                        <span id="status" class="font-label-sm text-label-sm uppercase tracking-[0.2em] text-primary">System Interface Idle</span>
                     </div>
-                    <div id="db-status-banner" class="font-label-sm text-[9px] tracking-[0.25em] opacity-40 text-center uppercase">
-                        CROSS_GRID_ROUTING: VECTOR INTEL STANDBY...
+                    <div id="db-status-banner" class="font-label-sm text-[9px] tracking-widest opacity-40 text-center uppercase">
+                        CROSS_GRID_ROUTING: INTEL VECTOR STANDBY...
                     </div>
                 </div>
                 
-                <!-- Main Communication Area Context -->
-                <div class="min-h-[160px] flex items-center justify-center w-full max-w-2xl mb-8">
-                    <h1 id="main-display-text" class="font-display-lg text-4xl md:text-5xl hero-text uppercase font-extrabold tracking-tight chromatic-glow text-on-surface transition-all duration-500">
-                        Say your <br/><span class="text-primary italic font-light">issue here</span>
-                    </h1>
-                </div>
+                <h1 id="main-display-text" class="font-display-lg text-[72px] hero-text uppercase chromatic-glow text-on-surface transition-all duration-500 max-w-2xl">
+                    Say your <br/> issue <span class="text-primary italic">here</span>
+                </h1>
                 
-                <!-- 🛰️ Intel Operational Dashboard Metrics Matrix -->
-                <div id="intel-matrix" class="hidden grid grid-cols-2 gap-x-8 gap-y-3.5 text-left font-label-sm text-[11px] border-t border-b border-white/[0.06] py-5 my-6 w-full max-w-md tracking-widest bg-black/20 p-4 rounded-lg">
-                    <div class="flex flex-col gap-0.5"><span class="opacity-30 text-[9px] font-bold">JOB ENGINE</span> <span id="readout-job" class="text-primary font-bold text-xs">--</span></div>
-                    <div class="flex flex-col gap-0.5"><span class="opacity-30 text-[9px] font-bold">CLASSIFICATION</span> <span id="readout-type" class="text-white/90 font-bold text-xs">--</span></div>
-                    <div class="flex flex-col gap-0.5"><span class="opacity-30 text-[9px] font-bold">SECTOR DOMAIN</span> <span id="readout-sector" class="text-white/90 font-bold text-xs">--</span></div>
-                    <div class="flex flex-col gap-0.5"><span class="opacity-30 text-[9px] font-bold">DISPATCH TARGET</span> <span id="readout-resource" class="text-emerald-400 font-bold text-xs">--</span></div>
-                </div>
-                
-                <!-- 📡 Automated Pipeline Response Display Alert Card -->
-                <div id="dispatch-alert-card" class="hidden w-full max-w-md p-4 rounded-lg text-left font-label-sm space-y-2 mt-2 transition-all duration-300">
-                    <div id="dispatch-title" class="flex items-center gap-2 font-bold tracking-widest uppercase text-[11px]"></div>
-                    <p id="dispatch-action-text" class="text-white/80 font-body-md text-sm leading-relaxed">--</p>
+                <!-- 📡 Automated Action Display Box -->
+                <div id="dispatch-alert-card" class="hidden w-full max-w-md p-4 rounded text-left font-label-sm space-y-2 mt-4 animate-pulse">
+                    <div id="dispatch-title" class="flex items-center gap-2 font-bold tracking-wider uppercase text-[12px]">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                    <p id="dispatch-action-text" class="text-white font-body-md text-[13px] opacity-90">--</p>
                 </div>
 
-                <!-- Capture Peripheral Interface Controls -->
-                <div class="pt-10 flex flex-col items-center">
-                    <button id="record-btn" onclick="toggleRecording()" class="w-24 h-24 rounded-full border border-white/10 bg-white/[0.02] hover:bg-white/[0.06] hover:border-primary/40 text-on-surface flex flex-col items-center justify-center gap-1.5 transition-all duration-300 active:scale-95 group shadow-2xl cursor-pointer relative">
-                        <span class="absolute inset-0 rounded-full bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                        <span id="record-icon" class="material-symbols-outlined text-3xl text-primary transition-transform duration-300 group-hover:scale-110">mic</span>
-                        <span id="record-text" class="font-label-sm text-[9px] uppercase tracking-[0.2em] font-bold opacity-50">Record</span>
+                <div id="intel-matrix" class="hidden grid grid-cols-2 gap-x-12 gap-y-2 text-left font-label-sm text-[11px] border-t border-b border-white/5 py-4 my-4 w-full max-w-md tracking-wider">
+                    <div><span class="opacity-40">JOB ENGINE:</span> <span id="readout-job" class="text-primary font-bold">--</span></div>
+                    <div><span class="opacity-40">CLASSIFY:</span> <span id="readout-type" class="text-white font-bold">--</span></div>
+                    <div><span class="opacity-40">SECTOR EXP:</span> <span id="readout-sector" class="text-white font-bold">--</span></div>
+                    <div><span class="opacity-40">DISPATCHED:</span> <span id="readout-resource" class="text-emerald-400 font-bold">--</span></div>
+                </div>
+                
+                <div class="pt-8">
+                    <button id="record-btn" onclick="toggleRecording()" class="w-24 h-24 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-primary/50 text-on-surface flex flex-col items-center justify-center gap-1 transition-all duration-500 active:scale-95 group shadow-xl cursor-pointer">
+                        <span id="record-icon" class="material-symbols-outlined text-3xl text-primary transition-all duration-300">mic</span>
+                        <span id="record-text" class="font-label-sm text-[9px] uppercase tracking-widest font-semibold opacity-60">Record</span>
                     </button>
                 </div>
                 
-                <div class="mt-12 h-[1px] w-24 bg-gradient-to-r from-transparent via-primary/40 to-transparent signal-glow"></div>
+                <div class="mt-margin h-[1px] w-16 bg-primary/40 mx-auto signal-glow"></div>
+            </div>
+
+            <div id="system-readout" class="absolute bottom-6 right-8 font-label-sm text-[10px] text-on-tertiary-fixed-variant opacity-30 pointer-events-none uppercase tracking-[0.3em] max-w-xs text-right truncate">
+                VAANI_OS // CORE_VERSION_5.0
             </div>
         </div>
     </div>
 </main>
 
-<footer class="w-full py-4 text-center font-label-sm text-[9px] tracking-[0.3em] opacity-30 border-t border-white/[0.01] bg-black/20 relative z-10">
-    VAANI OPERATIONAL NEURAL DATA INTERFACE LAYER v4.9.2
+<footer class="fixed bottom-0 left-0 w-full z-50">
+    <div class="flex flex-col md:flex-row justify-between items-center w-full px-margin py-gutter gap-unit max-w-container-max-width mx-auto">
+        <div class="font-label-sm text-[10px] text-on-surface-variant/60 uppercase tracking-widest">
+            © 2026 VAANI SYSTEMS
+        </div>
+        <div class="flex gap-margin items-center">
+            <a class="font-label-sm text-[10px] text-on-tertiary-fixed-variant/60 hover:text-on-surface uppercase tracking-widest transition-opacity" href="#">Documentation</a>
+            <span class="text-on-tertiary-fixed-variant/20">/</span>
+            <a class="font-label-sm text-[10px] text-on-tertiary-fixed-variant/60 hover:text-on-surface uppercase tracking-widest transition-opacity" href="#">Privacy</a>
+        </div>
+    </div>
 </footer>
 
 <script>
-    // Premium Mouse Parallax Interactive System Matrix
     document.addEventListener('mousemove', (e) => {
-        const moveX = (e.clientX - window.innerWidth / 2) / 90;
-        const moveY = (e.clientY - window.innerHeight / 2) / 90;
+        const moveX = (e.clientX - window.innerWidth / 2) / 80;
+        const moveY = (e.clientY - window.innerHeight / 2) / 80;
         const panel = document.querySelector('.glass-panel');
         const bg = document.querySelector('.fixed.inset-0.z-0');
-        if(panel) panel.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
-        if(bg) bg.style.transform = `scale(1.05) translate3d(${moveX * -0.4}px, ${moveY * -0.4}px, 0)`;
+        
+        if(panel) panel.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        if(bg) bg.style.transform = `scale(1.1) translate(${moveX * -0.5}px, ${moveY * -0.5}px)`;
     });
 
     let mediaRecorder;
     let audioChunks = [];
     let isRecording = false;
 
-    // Backend Connection Base Path Configuration
+    // 🔥 OPTIMIZED SOLUTION: Declared clean base with no trailing slash
     const DEPLOYED_BACKEND_URL = "https://vaani-m25h.onrender.com";
 
     async function toggleRecording() {
@@ -257,7 +262,26 @@
         if (!isRecording) {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                
+                // 📡 Dynamically determine the best audio format supported by this client browser
+                let mimeType = 'audio/webm';
+                let fileExtension = 'webm';
+
+                if (!MediaRecorder.isTypeSupported(mimeType)) {
+                    if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                        mimeType = 'audio/mp4';
+                        fileExtension = 'mp4';
+                    } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+                        mimeType = 'audio/ogg';
+                        fileExtension = 'ogg';
+                    } else {
+                        mimeType = ''; // Defaults to device standard
+                        fileExtension = 'wav';
+                    }
+                }
+
+                const options = mimeType ? { mimeType } : {};
+                mediaRecorder = new MediaRecorder(stream, options);
                 audioChunks = [];
 
                 mediaRecorder.ondataavailable = event => {
@@ -265,140 +289,230 @@
                 };
 
                 mediaRecorder.onstop = async () => {
-                    statusText.innerText = "Processing Voice Protocol via AI Core...";
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    await processCrisisPipeline(audioBlob);
+                    statusText.innerText = "Processing Voice Protocol via Sarvam AI...";
+                    // Append matching mime type to avoid structural payload corruption
+                    const audioBlob = new Blob(audioChunks, { type: mimeType || 'audio/wav' });
+                    await processCrisisPipeline(audioBlob, fileExtension);
                 };
 
                 mediaRecorder.start();
                 isRecording = true;
 
-                recordBtn.classList.add("border-red-500/40", "bg-red-950/20");
+                recordBtn.classList.add("border-red-500/50", "bg-red-900/20");
                 recordIcon.innerText = "stop";
-                recordIcon.className = "material-symbols-outlined text-3xl text-red-400 animate-pulse";
+                recordIcon.className = "material-symbols-outlined text-3xl text-red-500 animate-pulse";
                 recordText.innerText = "Stop";
-                statusPulse.className = "w-2 h-2 rounded-full bg-red-500 animate-ping";
-                statusText.innerText = "Streaming live audio packets...";
-                statusText.className = "font-label-sm text-[11px] uppercase tracking-[0.2em] text-red-400 font-bold";
+                statusPulse.className = "w-1.5 h-1.5 rounded-full bg-red-500 animate-ping shadow-[0_0_10px_#ef4444]";
+                statusText.innerText = "Intercepting local audio data streams...";
+                statusText.className = "font-label-sm text-label-sm uppercase tracking-[0.2em] text-red-400";
 
             } catch (err) {
                 console.error("Audio pipeline crash:", err);
-                statusText.innerText = "MIC CAPTURE MALFUNCTION";
-                statusText.className = "font-label-sm text-[11px] uppercase tracking-[0.2em] text-red-500 font-bold";
+                statusText.innerText = "CAPTURE HARDWARE MALFUNCTION";
             }
         } else {
             mediaRecorder.stop();
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
             isRecording = false;
 
-            recordBtn.classList.remove("border-red-500/40", "bg-red-950/20");
+            recordBtn.classList.remove("border-red-500/50", "bg-red-900/20");
             recordIcon.innerText = "mic";
-            recordIcon.className = "material-symbols-outlined text-3xl text-primary transition-transform duration-300 group-hover:scale-110";
+            recordIcon.className = "material-symbols-outlined text-3xl text-primary";
             recordText.innerText = "Record";
         }
     }
 
-    async function processCrisisPipeline(blob) {
+    async function processCrisisPipeline(blob, extension = 'webm') {
         const statusText = document.getElementById("status");
         const statusPulse = document.getElementById("status-pulse");
-        const formData = new FormData();
-        formData.append("file", blob, "live_capture.webm");
-
-        try {
-            const response = await fetch(`${DEPLOYED_BACKEND_URL}/api/voice-incident`, {
-                method: "POST",
-                body: formData
-            });
-
-            if (!response.ok) throw new Error("Server transmission degraded");
-
-            const data = await response.json();
-            executeUIRouting(data);
-
-        } catch (error) {
-            console.warn("Pipeline fault captured. Activating backup local routing...", error);
-            
-            const fallbackData = {
-                "job_id": "SYS-LOCAL",
-                "transcript": "Pinterest fallback routing activated via safety framework.",
-                "incident_type": "BACKUP_GRID_SEARCH",
-                "sector": "VISUAL_GRID",
-                "allocated_resource": "PINTEREST_ROUTER",
-                "routing": {
-                    "target_app": "pinterest",
-                    "extracted_params": { "query": "cyberpunk fashion design" }
-                }
-            };
-            
-            statusText.innerText = "LOCAL SAFEGUARD DISPATCH ENGAGED";
-            statusText.className = "font-label-sm text-[11px] uppercase tracking-[0.2em] text-amber-400 font-bold";
-            statusPulse.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_12px_rgba(251,191,36,0.8)]";
-            
-            executeUIRouting(fallbackData);
-        }
-    }
-
-    function executeUIRouting(data) {
         const mainDisplay = document.getElementById("main-display-text");
         const intelMatrix = document.getElementById("intel-matrix");
         const dispatchCard = document.getElementById("dispatch-alert-card");
         const dispatchTitle = document.getElementById("dispatch-title");
         const dispatchText = document.getElementById("dispatch-action-text");
-        const transcript = data.transcript;
 
-        mainDisplay.innerHTML = `<span class="text-[10px] block tracking-[0.3em] text-primary/60 font-label-sm uppercase mb-3 font-bold">TRANSCRIPT CAPTURED</span> <span class="font-body-md text-white/90 normal-case text-xl md:text-2xl font-medium leading-relaxed">"${transcript}"</span>`;
+        const formData = new FormData();
+        // Send file with correct metadata file extension so the Flask backend doesn't crash on parse
+        formData.append("file", blob, `live_capture.${extension}`);
 
-        document.getElementById("readout-job").innerText = data.job_id || "--";
-        document.getElementById("readout-type").innerText = data.incident_type || "--";
-        document.getElementById("readout-sector").innerText = data.sector || "--";
-        document.getElementById("readout-resource").innerText = data.allocated_resource || "--";
-        
-        intelMatrix.classList.remove("hidden");
-        intelMatrix.classList.add("grid");
+        try {
+            // 🔥 Clean URL combination template string to safeguard routing paths
+            const response = await fetch(`${DEPLOYED_BACKEND_URL}/api/voice-incident`, {
+                method: "POST",
+                body: formData
+            });
 
-        const routing = data.routing;
-        if (!routing) return;
-        
-        const appType = routing.target_app ? routing.target_app.toLowerCase() : "";
-        const params = routing.extracted_params || {};
-        let targetUrl = "";
+            if (!response.ok) throw new Error("Flask pipeline error");
 
-        // Reset visibility classes cleanly
-        dispatchCard.className = "w-full max-w-md p-5 rounded-lg text-left font-label-sm space-y-2 mt-4 block border bg-neutral-900/40 backdrop-blur-md animate-pulse shadow-lg";
-        const cleanAppType = appType.trim().toLowerCase();
+            const data = await response.json();
+            const transcript = data.transcript;
 
-        switch(cleanAppType) {
-            case "pinterest":
-                dispatchCard.classList.add("border-red-500/30", "shadow-red-950/20");
-                dispatchTitle.className = "text-red-400 font-bold tracking-[0.2em] uppercase text-[11px] flex items-center gap-1.5";
-                dispatchTitle.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> PINTEREST VISUAL MATRIX`;
-                targetUrl = `https://in.pinterest.com/search/pins/?q=${encodeURIComponent(params.query || transcript)}`;
-                dispatchText.innerText = `Sourcing creative style variables and mapping active visual panels...`;
-                break;
-            case "youtube":
-                dispatchCard.classList.add("border-red-500/30", "shadow-red-950/20");
-                dispatchTitle.className = "text-red-400 font-bold tracking-[0.2em] uppercase text-[11px] flex items-center gap-1.5";
-                dispatchTitle.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> YOUTUBE STREAM ENGINE`;
-                targetUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(params.query || transcript)}`;
-                dispatchText.innerText = `Routing parameter queries directly to global media index channels...`;
-                break;
-            case "spotify":
-                dispatchCard.classList.add("border-emerald-500/30", "shadow-emerald-950/20");
-                dispatchTitle.className = "text-emerald-400 font-bold tracking-[0.2em] uppercase text-[11px] flex items-center gap-1.5";
-                dispatchTitle.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> SPOTIFY ACOUSTIC CHANNELS`;
-                targetUrl = `https://open.spotify.com/search/${encodeURIComponent(params.query || transcript)}/tracks`;
-                dispatchText.innerText = `Initializing track stream query pathways...`;
-                break;
-            default:
-                dispatchCard.classList.add("border-neutral-500/30", "shadow-black/40");
-                dispatchTitle.className = "text-neutral-400 font-bold tracking-[0.2em] uppercase text-[11px] flex items-center gap-1.5";
-                dispatchTitle.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span> GLOBAL WEB SEARCH CORE`;
-                dispatchText.innerText = `Intent path undefined. Defaulting operational parameters to external search nodes...`;
-                targetUrl = `https://www.google.com/search?q=${encodeURIComponent(transcript)}`;
-        }
+            mainDisplay.innerHTML = `<span class="text-sm block tracking-widest text-primary/60 font-label-sm uppercase mb-2">TRANSCRIPT CAPTURED</span> "${transcript}"`;
+            mainDisplay.classList.remove("text-[72px]");
+            mainDisplay.classList.add("text-[32px]", "normal-case", "font-body-md");
 
-        if (targetUrl !== "") {
-            setTimeout(() => { window.location.href = targetUrl; }, 2200);
+            document.getElementById("readout-job").innerText = data.job_id || "--";
+            document.getElementById("readout-type").innerText = data.incident_type || "--";
+            document.getElementById("readout-sector").innerText = data.sector || "--";
+            document.getElementById("readout-resource").innerText = data.allocated_resource || "--";
+            
+            intelMatrix.classList.remove("hidden");
+
+            statusPulse.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]";
+            statusText.innerText = "Neural Intention Decoded";
+            statusText.className = "font-label-sm text-label-sm uppercase tracking-[0.2em] text-emerald-400";
+
+            const routing = data.routing;
+            if (!routing) return;
+            
+            const appType = routing.target_app ? routing.target_app.toLowerCase() : "";
+            const params = routing.extracted_params || {};
+            let targetUrl = "";
+
+            dispatchCard.className = "w-full max-w-md p-4 rounded text-left font-label-sm space-y-2 mt-4 block border";
+            dispatchCard.classList.remove("hidden");
+
+            const cleanAppType = appType ? appType.trim().toLowerCase() : "";
+
+            switch(cleanAppType) {
+                case "pinterest":
+                    dispatchCard.classList.add("bg-rose-950/30", "border-red-600/40", "shadow-[0_0_15px_rgba(225,29,72,0.25)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-rose-500 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">collections</span> PINTEREST VISUAL MATRIX`;
+                    const pinQuery = params && params.query ? params.query : (transcript || "");
+                    dispatchText.innerText = `Sourcing creative style and visual moodboards for: "${pinQuery}"...`;
+                    targetUrl = `https://in.pinterest.com/search/pins/?q=${encodeURIComponent(pinQuery)}`;
+                    break;
+
+                case "youtube":
+                    dispatchCard.classList.add("bg-red-950/20", "border-red-500/30", "shadow-[0_0_15px_rgba(239,68,68,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-red-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">video_library</span> YOUTUBE STREAM ENGINE`;
+                    const ytQuery = params && params.query ? params.query : (transcript || "");
+                    dispatchText.innerText = `Routing request to global video matrix for: "${ytQuery}"...`;
+                    targetUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(ytQuery)}`;
+                    break;
+
+                case "amazon":
+                    dispatchCard.classList.add("bg-orange-950/20", "border-orange-500/30", "shadow-[0_0_15px_rgba(249,115,22,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-orange-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">shopping_cart</span> AMAZON SUPPLY CORE`;
+                    dispatchText.innerText = `Sourcing consumer network. Initializing search vectors for "${params?.product_query || 'items'}"...`;
+                    targetUrl = `https://www.amazon.in/s?k=${encodeURIComponent(params?.product_query || '')}`;
+                    break;
+
+                case "flipkart":
+                    dispatchCard.classList.add("bg-blue-950/20", "border-blue-500/30", "shadow-[0_0_15px_rgba(59,130,246,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-blue-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">local_mall</span> FLIPKART LOGISTICS MATRIX`;
+                    dispatchText.innerText = `Querying commercial databases for item matrix indices matching "${params?.product_query || 'items'}"...`;
+                    targetUrl = `https://www.flipkart.com/search?q=${encodeURIComponent(params?.product_query || '')}`;
+                    break;
+
+                case "food":
+                    dispatchCard.classList.add("bg-rose-950/20", "border-rose-500/30", "shadow-[0_0_15px_rgba(244,63,94,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-rose-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">restaurant</span> BIO-SUSTENANCE DISPATCH`;
+                    dispatchText.innerText = `Scanning localized food grids to fulfill physical craving: "${params?.craving || 'food'}"...`;
+                    targetUrl = `https://www.google.com/maps/search/${encodeURIComponent(params?.craving || 'restaurants')}`;
+                    break;
+
+                case "notes":
+                    dispatchCard.classList.add("bg-stone-800/60", "border-stone-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-stone-300 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">description</span> SYSTEM ARCHIVE RECORDER`;
+                    dispatchText.innerText = `Appended text stream safely to your local disk storage records: "${params?.note_content || transcript}"`;
+                    targetUrl = ""; 
+                    break;
+
+                case "pomodoro":
+                    dispatchCard.classList.add("bg-amber-950/20", "border-amber-500/40");
+                    dispatchTitle.className = "flex items-center gap-2 text-amber-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">timer</span> CHRONOS FOCUS LOCK`;
+                    dispatchText.innerText = `Focus session initialized safely for ${params?.duration_minutes || 25} minutes. Interface protocols restricted.`;
+                    targetUrl = ""; 
+                    break;
+
+                case "spotify":
+                    dispatchCard.classList.add("bg-emerald-950/20", "border-emerald-500/30", "shadow-[0_0_15px_rgba(16,185,129,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-emerald-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">music_note</span> ACOUSTIC MATRIX ENGAGED`;
+                    dispatchText.innerText = `Searching ecosystem. Playing context focus: "${params?.query || 'music'}" inside Spotify Player...`;
+                    targetUrl = `https://open.spotify.com/search/${encodeURIComponent(params?.query || '')}/tracks`;
+                    break;
+
+                case "calendar":
+                    dispatchCard.classList.add("bg-sky-950/20", "border-sky-500/30", "shadow-[0_0_15px_rgba(14,165,233,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-sky-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">calendar_today</span> TEMPORAL ENGINE ENGAGED`;
+                    dispatchText.innerText = `Drafting meeting structure parameters: "${params?.event_title || 'Meeting'}"...`;
+                    targetUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(params?.event_title || '')}&details=${encodeURIComponent(params?.details || '')}`;
+                    break;
+
+                case "email":
+                    dispatchCard.classList.add("bg-purple-950/20", "border-purple-500/30", "shadow-[0_0_15px_rgba(168,85,247,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-purple-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">psychology</span> ADVANCED EXECUTIVE DISPATCH`;
+                    dispatchText.innerText = "Synthesizing dynamic context token layout parameters via secure pipeline core...";
+                    targetUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(params?.subject || '')}&body=${encodeURIComponent(params?.body || '')}`;
+                    break;
+
+                case "chatgpt":
+                    dispatchCard.classList.add("bg-amber-950/20", "border-amber-500/30", "shadow-[0_0_15px_rgba(245,158,11,0.2)]");
+                    dispatchTitle.className = "flex items-center gap-2 text-amber-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">smart_toy</span> COGNITIVE AI CONSOLE`;
+                    dispatchText.innerText = "Injecting custom vector prompt arrays straight to processing instance...";
+                    targetUrl = `https://chatgpt.com/?q=${encodeURIComponent(params?.ai_prompt || transcript)}`;
+                    break;
+
+                case "maps":
+                    dispatchCard.classList.add("bg-green-950/20", "border-green-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-green-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">map</span> GEOSPATIAL MAPS ENGINE`;
+                    dispatchText.innerText = `Resolving routing maps pathing nodes for: "${params?.location || 'maps'}"...`;
+                    targetUrl = `https://www.google.com/maps/search/${encodeURIComponent(params?.location || '')}`;
+                    break;
+
+                case "notion":
+                    dispatchCard.classList.add("bg-stone-800/60", "border-stone-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-stone-300 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">edit_note</span> NOTION WORKSPACE TARGET`;
+                    dispatchText.innerText = "Routing contextual logs to central workspace document arrays...";
+                    targetUrl = "https://www.notion.so";
+                    break;
+
+                case "whatsapp":
+                    dispatchCard.classList.add("bg-teal-950/20", "border-teal-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-teal-400 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">chat</span> WHATSAPP MESSENGER INTERFACE`;
+                    dispatchText.innerText = "Opening messenger core frameworks to allocate communication pipeline lines...";
+                    targetUrl = "https://web.whatsapp.com";
+                    break;
+
+                case "github":
+                    dispatchCard.classList.add("bg-neutral-900", "border-neutral-600");
+                    dispatchTitle.className = "flex items-center gap-2 text-neutral-300 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">terminal</span> DEVOPS GITHUB INTEGRATION`;
+                    dispatchText.innerText = "Loading remote infrastructure nodes inside GitHub cloud networks...";
+                    targetUrl = "https://github.com";
+                    break;
+
+                default:
+                    dispatchCard.classList.add("bg-neutral-800/60", "border-neutral-500/30");
+                    dispatchTitle.className = "flex items-center gap-2 text-neutral-300 font-bold tracking-wider uppercase text-[12px]";
+                    dispatchTitle.innerHTML = `<span class="material-symbols-outlined text-[16px]">search</span> GLOBAL WEB SEARCH`;
+                    dispatchText.innerText = `Command "${cleanAppType || 'unknown'}" unrecognized. Defaulting routing engines to Web Intel...`;
+                    targetUrl = `https://www.google.com/search?q=${encodeURIComponent(transcript || 'VAANI AI')}`;
+            }
+
+            if (targetUrl !== "") {
+                setTimeout(() => { window.location.href = targetUrl; }, 2200);
+            }
+
+        } catch (error) {
+            console.error("Pipeline fault:", error);
+            statusPulse.className = "w-1.5 h-1.5 rounded-full bg-red-500";
+            statusText.innerText = "System dispatch error // 500";
         }
     }
 </script>
