@@ -9,6 +9,16 @@ CORS(app)
 # Pulls the secret key you set up in your Render environment variables dashboard!
 SARVAM_API_KEY = os.environ.get("SARVAM_API_KEY")
 
+# 🌐 NEW: Home route to get rid of the 404 error page and confirm the server is live
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({
+        "status": "ONLINE",
+        "system": "VAANI Neural Grid Core",
+        "message": "Backend matrix is fully operational. Awaiting frontend audio payloads."
+    }), 200
+
+# 🎙️ Main audio processing route
 @app.route("/api/voice-incident", methods=["POST"])
 def voice_incident():
     # 1. Safeguard check
@@ -31,7 +41,7 @@ def voice_incident():
             'file': (audio_file.filename, audio_file.read(), audio_file.content_type)
         }
         
-        # 🔥 FIX: Changed model to 'saaras:v3' and added the required 'mode' parameter
+        # Configured for the correct model and required mode parameter
         data = {
             'model': 'saaras:v3',
             'mode': 'transcribe'
